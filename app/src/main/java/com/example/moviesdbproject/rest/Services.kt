@@ -1,6 +1,7 @@
 package com.example.moviesdbproject.rest
 
 import com.example.moviesdbproject.model.MoviesResponse
+import com.example.moviesdbproject.model.details.MoviesDetails
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -27,14 +28,14 @@ interface Services {
         @Path("movie_id") movieID: Int,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("language") language: String = LANGUAGE
-    ): Response<MoviesResponse>
+    ): Response<MoviesDetails>
 
     companion object{
 
 
         const val BASE_URL = "https://api.themoviedb.org/3/movie/"
         private const val API_KEY = "819950d4cf35be1fb70d8746bc0796bf"
-        private const val LANGUAGE = "en-US"
+        const val LANGUAGE = "en-US"
         private const val PAGE = 1
 
         //https://api.themoviedb.org/3/movie/now_playing?api_key=819950d4cf35be1fb70d8746bc0796bf&language=en-US&page=1
