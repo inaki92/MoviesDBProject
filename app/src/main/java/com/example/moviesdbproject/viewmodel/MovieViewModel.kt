@@ -8,8 +8,9 @@ import com.example.moviesdbproject.rest.MovieRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieViewModel (
+class MovieViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
     private var coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): ViewModel() {
