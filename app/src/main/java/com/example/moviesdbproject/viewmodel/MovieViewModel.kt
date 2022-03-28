@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviesdbproject.rest.MovieRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieViewModel (
+@HiltViewModel
+class MovieViewModel @Inject constructor (
     private val movieRepository: MovieRepository,
-    private var coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private var coroutineDispatcher: CoroutineDispatcher
 ): ViewModel() {
 
     private val _moviesLiveData:MutableLiveData<MovieState> = MutableLiveData(MovieState.LOADING)
