@@ -1,7 +1,5 @@
 package com.example.moviesdbproject.rest
 
-import com.example.moviesdbproject.exceptions.EmptyMoviesResponseException
-import com.example.moviesdbproject.exceptions.MoviesRequestErrorException
 import com.example.moviesdbproject.model.MoviesResponse
 import com.example.moviesdbproject.viewmodel.MovieState
 import kotlinx.coroutines.CoroutineScope
