@@ -26,6 +26,7 @@ class MovieViewModel @Inject constructor(
             movieRepository.movieDetails.collect {
                 _moviesLiveData.postValue(it)
             }
+
         }
     }
 
