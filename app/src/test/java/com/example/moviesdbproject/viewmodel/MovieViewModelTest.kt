@@ -82,4 +82,25 @@ class MovieViewModelTest {
         assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
         assertThat(stateList[2]).isInstanceOf(MovieState.SUCCESS::class.java)
     }
+
+    @Test
+    fun `live data test`() {
+        // AAA
+        // Assign
+        every { mockRepository.getPlayNowMovies() } returns flowOf(MovieState.SUCCESS(mockk<MoviesResponse>()))
+        val stateList = mutableListOf<MovieState>()
+        target.moviesLiveData.observeForever {
+            stateList.add(it)
+        }
+        // Action
+
+        target.getPlayNowMovies()
+
+        // Assert
+        assertThat(stateList).isNotEmpty()
+        assertThat(stateList).hasSize(3)
+        assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[2]).isInstanceOf(MovieState.SUCCESS::class.java)
+    }
 }
