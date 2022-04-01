@@ -28,8 +28,8 @@ class MovieViewModel @Inject constructor (
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(coroutineDispatcher) {
-            movieRepository.movieDetails.collect {
-                // todo posting to the livedata
+            movieRepository.movieDetails.collect { state ->
+                _moviesLiveData.postValue(state)
             }
         }
         movieRepository.getAllDetailsMovies(movieId, viewModelScope)
