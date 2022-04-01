@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*
@@ -20,6 +21,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.lang.Error
+import java.lang.Exception
 
 @ExperimentalCoroutinesApi
 class MovieViewModelTest {
@@ -81,5 +84,47 @@ class MovieViewModelTest {
         assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
         assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
         assertThat(stateList[2]).isInstanceOf(MovieState.SUCCESS::class.java)
+    }
+
+    @Test
+    fun `get play now movie trying to load from server error state`() {
+        // AAA
+        // Assign
+        every{ mockRepository.getPlayNowMovies() } returns flowOf(MovieState.
+        ERROR(Exception("Error")))
+        val stateList = mutableListOf<MovieState>()
+        target.moviesLiveData.observeForever {
+            stateList.add(it)
+        }
+
+        // Action
+        target.getPlayNowMovies()
+
+        // Assertion
+        assertThat(stateList).isNotEmpty()
+        assertThat(stateList).hasSize(3)
+        assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[2]).isInstanceOf(MovieState.ERROR::class.java)
+    }
+
+    @Test
+    fun `get movie details testing live data`(){
+        // AAA
+        // Assign
+        every{ mockRepository.movieDetails } returns MutableStateFlow(MovieState.LOADING)
+        val stateList = mutableListOf<MovieState>()
+        target.moviesLiveData.observeForever {
+            stateList.add(it)
+        }
+
+        // Action
+        target.getMovieDetails(1)
+
+        // Assertion
+        assertThat(stateList).isNotEmpty()
+        assertThat(stateList).hasSize(2)
+        assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
     }
 }
