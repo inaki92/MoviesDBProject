@@ -3,6 +3,7 @@ package com.example.moviesdbproject.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.viewModelScope
 import com.example.moviesdbproject.model.MoviesResponse
+import com.example.moviesdbproject.model.details.MoviesDetails
 import com.example.moviesdbproject.rest.MovieRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.clearAllMocks
@@ -109,7 +110,7 @@ class MovieViewModelTest {
     }
 
     @Test
-    fun `get movie details testing live data`(){
+    fun `get movie details when trying to load items from the server returns loading state`(){
         // AAA
         // Assign
         every{ mockRepository.movieDetails } returns MutableStateFlow(MovieState.LOADING)
@@ -126,5 +127,30 @@ class MovieViewModelTest {
         assertThat(stateList).hasSize(2)
         assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
         assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
+    }
+
+    @Test
+    fun `get movie details when trying to load items from the server returns success state`() {
+        // AAA
+        // Assign
+        every{ mockRepository.movieDetails } returns MutableStateFlow(
+            MovieState.SUCCESS(
+                mockk<MoviesDetails>()
+            )
+        )
+        val stateList = mutableListOf<MovieState>()
+        target.moviesLiveData.observeForever {
+            stateList.add(it)
+        }
+
+        // Action
+        target.getMovieDetails(1)
+
+        // Assertion
+        assertThat(stateList).isNotEmpty()
+        assertThat(stateList).hasSize(3)
+        assertThat(stateList[0]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[1]).isInstanceOf(MovieState.LOADING::class.java)
+        assertThat(stateList[2]).isInstanceOf(MovieState.SUCCESS::class.java)
     }
 }

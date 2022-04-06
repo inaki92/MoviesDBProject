@@ -26,7 +26,7 @@ class MovieRepositoryImpl(
       try {
          val response = movieServices.getAllPlayNowMovies()
          if (response.isSuccessful){
-            response.body() ?.let {
+            response.body()?.let {
                emit(MovieState.SUCCESS(it))
             } ?: throw Exception("Playing now movie no response")
          } else {
